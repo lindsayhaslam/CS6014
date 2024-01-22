@@ -1,0 +1,15 @@
+Hop 1 (10.18.128.2): Average Delay = 19.263333333333335 ms
+Hop 2 (155.99.130.69): Average Delay = 16.550333333333334 ms
+Hop 3 (155.99.130.56): Average Delay = 14.4325 ms
+Hop 4 (199.104.93.30): Average Delay = 12.372333333333332 ms
+Hop 5 (199.104.93.21): Average Delay = 18.787333333333336 ms
+Hop 6 (140.197.253.138): Average Delay = 17.096999999999998 ms
+Hop 7 (140.197.252.85): Average Delay = 16.093 ms
+Hop 8 (140.197.252.43): Average Delay = 15.201666666666668 ms
+Hop 9 (140.197.248.79): Average Delay = 16.099333333333334 ms
+Hop 11 (68.87.170.65): Average Delay = 12.770333333333333 ms
+Hop 12 (96.110.43.225): Average Delay = 54.51833333333334 ms
+Hop 13 (96.110.33.142): Average Delay = 48.843333333333334 ms
+Hop 14 (71.25.197.110): Average Delay = 34.553 ms
+Hop 15 (172.68.2.2): Average Delay = 29.513666666666666 ms
+Hop 16 (141.193.213.10): Average Delay = 43.62533333333334 ms
