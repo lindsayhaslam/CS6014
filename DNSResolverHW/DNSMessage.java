@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DNSMessage {
-    private DNSHeader header;
-    private DNSQuestion[] questions;
-    private DNSRecord[] answers;
-    private DNSRecord[] authorityRecords;
-    private DNSRecord[] additionalRecords;
+   DNSHeader header;
+   DNSQuestion[] questions;
+   DNSRecord[] answers;
+   DNSRecord[] authorityRecords;
+   DNSRecord[] additionalRecords;
     static byte[] messageBytes;
 
     HashMap<String, Integer> domainLocations;
@@ -29,7 +29,6 @@ public class DNSMessage {
     public DNSMessage(){
     }
 
-
     public static DNSMessage decodeMessage(byte[] bytes) throws IOException {
         DNSMessage message = new DNSMessage();
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
@@ -42,22 +41,29 @@ public class DNSMessage {
         message.authorityRecords = new DNSRecord[message.header.getAuthorityRRs()];
         message.additionalRecords = new DNSRecord[message.header.getAdditionalRRs()];
 
-//        for (int i = 0; i < message.header.getQuestions(); i++) {
-//            message.questions[i] = DNSQuestion.decodeQuestion(byteArrayInputStream, message);
-//        }
-//
-//        for (int i = 0; i < message.header.getAnswerRRs(); i++) {
-//            message.answers[i] = DNSRecord.decodeRecord(dataInputStream, message);
-//        }
-//
-//        for (int i = 0; i < message.header.getAuthorityRRs(); i++) {
-//            message.authorityRecords[i] = DNSRecord.decodeRecord(dataInputStream, message);
-//        }
-//        for (int i = 0; i < message.header.getAdditionalRRs(); i++) {
-//            message.additionalRecords[i] = DNSRecord.decodeRecord(dataInputStream, message);
-//        }
+        for (int i = 0; i < message.header.getQuestions(); i++) {
+            message.questions[i] = DNSQuestion.decodeQuestion(byteArrayInputStream, message);
+        }
+
+        for (int i = 0; i < message.header.getAnswerRRs(); i++) {
+            message.answers[i] = DNSRecord.decodeRecord(byteArrayInputStream, message);
+        }
+
+        for (int i = 0; i < message.header.getAuthorityRRs(); i++) {
+            message.authorityRecords[i] = DNSRecord.decodeRecord(byteArrayInputStream, message);
+        }
+        for (int i = 0; i < message.header.getAdditionalRRs(); i++) {
+            message.additionalRecords[i] = DNSRecord.decodeRecord(byteArrayInputStream, message);
+        }
 
         return message;
+    }
+
+    private static void readRecords(ByteArrayInputStream byteArrayInputStream, DNSRecord[] records, int count, DNSMessage message) throws IOException {
+        for (byte i = 0; i < count; i++){
+            DNSRecord record = DNSRecord.decodeRecord(byteArrayInputStream, message);
+            records[i] = record;
+        }
     }
 
     public static String[] readDomainName(InputStream inputStream) throws IOException {
@@ -100,6 +106,9 @@ public class DNSMessage {
     public static String[] readDomainName(int firstByte) throws IOException {
         //Read the pieces of a domain name from a specific position in the message (for compression)
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(messageBytes, firstByte, messageBytes.length - firstByte);
+        for(int i = firstByte; i < firstByte+10; i++){
+            System.out.println("Message bytes" + messageBytes[i]);
+        }
         return readDomainName(byteArrayInputStream);
     }
 
@@ -119,11 +128,10 @@ public class DNSMessage {
     public byte[] toBytes() throws IOException {
         //Convert the DNS message into a byte array for transmission
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
+        header.writeBytes(byteArrayOutputStream);
         //Hashmap for domainLocations
         domainLocations = new HashMap<>();
         //Header, Question, Answer
-        header.writeBytes(byteArrayOutputStream);
         //Answers should not be in a for loop!!!!
         //answers[0].writeBytes (myStream?, map)? Might cause nullptr, but should be fixed in the server.
         for (DNSQuestion question: questions){
@@ -155,8 +163,9 @@ public class DNSMessage {
             domainLocations.put(domainName, location);
 
             for (String label : domainPieces){
-                dataOutputStream.writeByte(label.length());
-                dataOutputStream.writeBytes(label);
+                byte[] labelBytes = label.getBytes(StandardCharsets.UTF_8);
+                dataOutputStream.writeByte(labelBytes.length);
+                dataOutputStream.write(labelBytes);
             }
 
             dataOutputStream.writeByte(0);
@@ -171,6 +180,7 @@ public class DNSMessage {
     @Override
     public String toString() {
         return "DNSMessage{" +
+                "\n Header=" + header +
                 "\n  Questions=" + Arrays.toString(questions) +
                 ",\n  Answers=" + Arrays.toString(answers) +
                 " Authority Records=" + Arrays.toString(authorityRecords) +

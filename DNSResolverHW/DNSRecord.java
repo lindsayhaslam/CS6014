@@ -56,12 +56,14 @@ public class DNSRecord {
         //read shorts, read ints, load the pieces into record
         dataInputStream.mark(2);
         short firstTwoBytes = dataInputStream.readShort();
-        dataInputStream.reset();
+
 
         if((firstTwoBytes & 0xC000) == 0xC000){
             int offset = firstTwoBytes & 0x3FFF;
             record.name = message.readDomainName(offset);
+            System.out.println("Record name" + Arrays.toString(record.name));
         } else {
+            dataInputStream.reset();
             record.name = message.readDomainName(dataInputStream);
         }
 

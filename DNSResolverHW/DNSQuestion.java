@@ -19,15 +19,16 @@ public class DNSQuestion {
             |                     QCLASS                    |
             +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+*/
 
-//Variables
-    private  String[] domainName;
+    //Variables
+    private String[] domainName;
     private int queryType;
     private int queryClass;
     //Possibly will need getter functions
+    DNSMessage message;
 
     static DNSQuestion decodeQuestion(InputStream input, DNSMessage message) throws IOException {
-        DataInputStream dataInputStream = new DataInputStream(input);
         DNSQuestion question = new DNSQuestion();
+        DataInputStream dataInputStream = new DataInputStream(input);
         //Read domain, considering compression.
         question.domainName = DNSMessage.readDomainName(input);
         //Read the query type (2 bytes)
@@ -47,33 +48,25 @@ public class DNSQuestion {
         dataOutputStream.writeShort(queryClass);
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
+//    @Override
+//    public String toString() {
+//        return super.toString();
+//    }
+//
+//}
 
-    //This will be used by hashCode
+
     @Override
     public boolean equals(Object o) {
-        if (this == o){
-            return true;
-        }
-     if (this.getClass() != o.getClass()){
-         return false;
-     }
-     DNSQuestion question = (DNSQuestion) o;
-     if (this.queryClass != question.queryClass){
-         return false;
-     }
-     if (this.queryType != question.queryType){
-         return false;
-     }
-        return Arrays.equals(this.domainName, question.domainName);
+        if (this == o) return true;
+        if (!(o instanceof DNSQuestion question)) return false;
+        return queryType == question.queryType && queryClass == question.queryClass && Arrays.equals(domainName, question.domainName) && Objects.equals(message, question.message);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Arrays.hashCode(domainName), queryType, queryClass);
+        int result = Objects.hash(queryType, queryClass, message);
+        result = 31 * result + Arrays.hashCode(domainName);
+        return result;
     }
 }
-

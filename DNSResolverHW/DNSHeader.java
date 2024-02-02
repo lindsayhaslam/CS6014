@@ -7,7 +7,7 @@ public class DNSHeader {
 
     //Variables
     private short transactionID;
-    private int flags;
+    private short flags;
     private int qr;
     private int opCode;
     private int aa;
@@ -16,14 +16,23 @@ public class DNSHeader {
     private int ra;
     private int z;
     private int rCode;
-    private int questions;
-    private int answerRRs;
-    private int authorityRRs;
-    private int additionalRRs;
+    private short questions;
+    private short answerRRs;
+    private short authorityRRs;
+    private short additionalRRs;
 
 
     //Constructor, leave empty because fields will be set via decoding or building methods
-    public DNSHeader(){}
+    public DNSHeader(){
+        transactionID = 0;
+        qr = 0;
+        opCode = 0;
+        aa = 0;
+        tc = 0;
+        rd = 0;
+        ra = 0;
+        z = 0;
+    }
 
     //Getter methods for each field
     public int getTransactionID() {
@@ -106,7 +115,8 @@ public class DNSHeader {
        DataOutputStream outputStream = new DataOutputStream(output);
        outputStream.writeShort(transactionID);
        //qr part of flag has to be converted to 1 (Anding)
-       flags = (short) 0x8180; //Ask Gloria (QR is being changed to 1)
+//       flags = (short) 0x8180; //Ask Gloria (QR is being changed to 1)
+       outputStream.writeShort(flags);
        outputStream.writeShort(questions);
        outputStream.writeShort(answerRRs);
        outputStream.writeShort(authorityRRs);
