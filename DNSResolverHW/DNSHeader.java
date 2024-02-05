@@ -22,7 +22,7 @@ public class DNSHeader {
     private short additionalRRs;
 
 
-    //Constructor, leave empty because fields will be set via decoding or building methods
+    //Constructor
     public DNSHeader(){
         transactionID = 0;
         qr = 0;
@@ -111,11 +111,8 @@ public class DNSHeader {
     }
 
    public void writeBytes(OutputStream output) throws IOException {
-        //change the OutputStream to dataoutputstream
        DataOutputStream outputStream = new DataOutputStream(output);
        outputStream.writeShort(transactionID);
-       //qr part of flag has to be converted to 1 (Anding)
-//       flags = (short) 0x8180; //Ask Gloria (QR is being changed to 1)
        outputStream.writeShort(flags);
        outputStream.writeShort(questions);
        outputStream.writeShort(answerRRs);

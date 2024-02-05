@@ -23,7 +23,6 @@ public class DNSQuestion {
     private String[] domainName;
     private int queryType;
     private int queryClass;
-    //Possibly will need getter functions
     DNSMessage message;
 
     static DNSQuestion decodeQuestion(InputStream input, DNSMessage message) throws IOException {
@@ -47,14 +46,6 @@ public class DNSQuestion {
         //Write QCLASS (2 bytes)
         dataOutputStream.writeShort(queryClass);
     }
-
-//    @Override
-//    public String toString() {
-//        return super.toString();
-//    }
-//
-//}
-
 
     @Override
     public boolean equals(Object o) {

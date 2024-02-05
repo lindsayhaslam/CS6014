@@ -43,17 +43,6 @@ public class DNSRecord {
     static DNSRecord decodeRecord(InputStream input, DNSMessage message) throws IOException {
         DNSRecord record = new DNSRecord();
         DataInputStream dataInputStream = new DataInputStream(input);
-
-        //Check for compression (4.1)
-        //if compressed, call the read domain name with an int parameter
-        //else call the normal one
-        //.mark(2) only want to read in a short
-        //reset in else statement
-        //bool compressedFlag() (compress & 0xC00) == 0xC00);
-        //if compress flag, then pull it out by anding it with a (short) 0x3FFF;
-        //then store in record.domainName - message.readDomainName
-        //Else, reset, then record.domainName_= message.readDomainName(inputStream)
-        //read shorts, read ints, load the pieces into record
         dataInputStream.mark(2);
         short firstTwoBytes = dataInputStream.readShort();
 

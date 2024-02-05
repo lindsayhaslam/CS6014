@@ -67,25 +67,6 @@ public class DNSMessage {
     }
 
     public static String[] readDomainName(InputStream inputStream) throws IOException {
-//        DataInputStream dataInputStream = new DataInputStream(inputStream);
-//        String qName = "";
-//        int length;
-//        ArrayList<String> arrayList = new ArrayList<>();
-//
-//        while ((length = dataInputStream.readByte())> 0){
-//            byte[] record = new byte[length];
-//            for(int i = 0; i < length; i++){
-//                record[i] = dataInputStream.readByte();
-//            }
-//            qName = new String (record, StandardCharsets.UTF_8);
-//            arrayList.add(qName);
-//        }
-//
-//        String[] returnString = new String[arrayList.size()];
-//        for(int i = 0; i < arrayList.size(); i++){
-//            returnString[i] = arrayList.get(i);
-//        }
-
         List<String> labels = new ArrayList<>();
         DataInputStream stream = new DataInputStream(inputStream);
         byte length = stream.readByte();
@@ -118,8 +99,6 @@ public class DNSMessage {
             response.header = DNSHeader.buildHeaderForResponse(request, response);
             response.questions = request.questions;
             response.answers = answers;
-            // Initialize authority and additional records if necessary
-            // For a basic implementation, these can be empty arrays.
             response.authorityRecords = new DNSRecord[0];
             response.additionalRecords = new DNSRecord[0];
             return response;
@@ -132,8 +111,6 @@ public class DNSMessage {
         //Hashmap for domainLocations
         domainLocations = new HashMap<>();
         //Header, Question, Answer
-        //Answers should not be in a for loop!!!!
-        //answers[0].writeBytes (myStream?, map)? Might cause nullptr, but should be fixed in the server.
         for (DNSQuestion question: questions){
             question.writeBytes(byteArrayOutputStream, domainLocations);
         }
@@ -149,8 +126,6 @@ public class DNSMessage {
         return byteArrayOutputStream.toByteArray();
     }
 
-
-    //Don't do anything to this yet.
     public static void writeDomainName(ByteArrayOutputStream outputStream, HashMap<String, Integer> domainLocations, String[] domainPieces) throws IOException {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         String domainName = joinDomainName(domainPieces);
