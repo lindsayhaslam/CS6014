@@ -37,7 +37,6 @@ public class DNSRecord {
     DNSMessage message_;
 
     public DNSRecord(){
-
     }
 
     static DNSRecord decodeRecord(InputStream input, DNSMessage message) throws IOException {
