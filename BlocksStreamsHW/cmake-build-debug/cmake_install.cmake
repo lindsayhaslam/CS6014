@@ -1,4 +1,4 @@
-# Install script for directory: /Users/lindsayhaslam/CS6014/BlocksStreamsHW
+# Install script for directory: /Users/lindsayhaslam/CS6014/CS6014/BlocksStreamsHW
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/lindsayhaslam/CS6014/BlocksStreamsHW/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/lindsayhaslam/CS6014/CS6014/BlocksStreamsHW/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/lindsayhaslam/CS6014/BlocksStreamsHW/cmake-build-debug",
-		"source" : "/Users/lindsayhaslam/CS6014/BlocksStreamsHW"
+		"build" : "/Users/lindsayhaslam/CS6014/CS6014/BlocksStreamsHW/cmake-build-debug",
+		"source" : "/Users/lindsayhaslam/CS6014/CS6014/BlocksStreamsHW"
 	},
 	"version" : 
 	{
