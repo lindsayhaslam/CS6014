@@ -176,8 +176,6 @@ public class Shared {
         try {
             return otherPublicKey.modPow(privateKey, n);
         } catch (NullPointerException e) {
-            // This catch block is just to catch any unexpected NullPointerException.
-            // Ideally, you should never reach this point because of the above checks.
             e.printStackTrace();
             throw new RuntimeException("Unexpected NullPointerException in getSharedDHKey.");
         }
@@ -185,7 +183,7 @@ public class Shared {
 
     public static byte[] encryptMsg(byte[] originalText, byte[] encryptKey, byte[] iv, byte[] macKey ) throws NoSuchAlgorithmException, InvalidKeyException, IOException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
 
-        // Calculate HMAC
+        //Calculate HMAC
         System.out.println("Encrypt Key: " + Arrays.toString(encryptKey));
         System.out.println("Encrypt IV: " + Arrays.toString(iv));
 
@@ -194,20 +192,19 @@ public class Shared {
         mac.init(macKeySpec);
         byte[] HMAC = mac.doFinal(originalText);
 
-        // Concatenate originalText and HMAC
+        //Concatenate originalText and HMAC
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byteArrayOutputStream.write(originalText);
         byteArrayOutputStream.write(HMAC);
         byte[] originalTxtWithHMAC = byteArrayOutputStream.toByteArray();
 
-        // Encrypt concatenated data
+        //Encrypt concatenated data
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         SecretKeySpec keySpec = new SecretKeySpec(encryptKey, "AES");
         IvParameterSpec ivSpec = new IvParameterSpec(iv);
 
-
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
-        return cipher.doFinal(originalTxtWithHMAC); // IV is assumed to be known or handled outside this method
+        return cipher.doFinal(originalTxtWithHMAC);
 
     }
 
@@ -217,7 +214,7 @@ public class Shared {
         System.out.println("Decrypt IV: " + Arrays.toString(iv));
 
         //ROUND 3
-        // Initialize Cipher for Decryption
+        //Initialize Cipher for Decryption
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         SecretKeySpec keySpec = new SecretKeySpec(decryptKey, "AES");
         IvParameterSpec ivSpec = new IvParameterSpec(iv);
@@ -225,20 +222,20 @@ public class Shared {
         cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
         byte[] decryptedContent = cipher.doFinal(cipherText);
 
-        // Assuming HMAC-SHA256 produces 32 bytes HMAC
+        //Assuming HMAC-SHA256 produces 32 bytes HMAC
         if (decryptedContent.length < 32) {
             throw new IllegalArgumentException("Decrypted content is too short.");
         }
         byte[] originalText = Arrays.copyOfRange(decryptedContent, 0, decryptedContent.length - 32);
         byte[] extractedHMAC = Arrays.copyOfRange(decryptedContent, decryptedContent.length - 32, decryptedContent.length);
 
-        // Recompute HMAC for the original text to verify
+        //Recompute HMAC for the original text to verify
         Mac mac = Mac.getInstance("HmacSHA256");
         SecretKeySpec macKeySpec = new SecretKeySpec(macKey, "HmacSHA256");
         mac.init(macKeySpec);
         byte[] recomputedHMAC = mac.doFinal(originalText);
 
-        // Check if the recomputed HMAC matches the extracted HMAC
+        //Check if the recomputed HMAC matches the extracted HMAC
         if (!Arrays.equals(extractedHMAC, recomputedHMAC)) {
             throw new SecurityException("HMAC verification failed, indicating potential tampering.");
         }
